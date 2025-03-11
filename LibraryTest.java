@@ -2,7 +2,7 @@ import java.util.Scanner;
 import java.util.List;
 import java.util.ArrayList;
 
-// Base class: Item
+// Abstract class representing a generic library item
 abstract class Item {
     private String title;
     private int publicationYear;
@@ -20,17 +20,18 @@ abstract class Item {
         return publicationYear;
     }
 
+    // Abstract method to display item information
     public abstract void displayInfo();
 }
 
-// Interface: IBorrowable
+// Interface defining borrowable items
 interface IBorrowable {
     void borrowItem(String borrower);
     void returnItem();
     boolean isBorrowed();
 }
 
-// Subclass: Book implementing IBorrowable
+// Book class extends Item and implements IBorrowable
 class Book extends Item implements IBorrowable {
     private String author;
     private String ISBN;
@@ -51,6 +52,7 @@ class Book extends Item implements IBorrowable {
         return ISBN;
     }
 
+    // Allows a user to borrow the book if it's not already borrowed
     @Override
     public void borrowItem(String borrower) {
         if (this.borrower == null) {
@@ -61,6 +63,7 @@ class Book extends Item implements IBorrowable {
         }
     }
 
+    // Allows a user to return the book
     @Override
     public void returnItem() {
         if (this.borrower != null) {
@@ -82,7 +85,7 @@ class Book extends Item implements IBorrowable {
     }
 }
 
-// Subclass: Magazine
+// Magazine class extending Item but does not implement IBorrowable
 class Magazine extends Item {
     private int issueNumber;
 
@@ -101,7 +104,7 @@ class Magazine extends Item {
     }
 }
 
-// Singleton: Library class
+// Singleton class for managing library items
 class Library {
     private static Library instance;
     private List<Item> items;
@@ -121,6 +124,7 @@ class Library {
         items.add(item);
     }
 
+    // Lists available items, skipping borrowed books
     public void listAvailableItems() {
         for (Item item : items) {
             if (item instanceof Book && ((Book) item).isBorrowed()) {
@@ -130,6 +134,7 @@ class Library {
         }
     }
 
+    // Finds an item by its title
     public Item findItemByTitle(String title) {
         for (Item item : items) {
             if (item.getTitle().equalsIgnoreCase(title)) {
@@ -140,7 +145,7 @@ class Library {
     }
 }
 
-// Factory Pattern: LibraryItemFactory
+// Factory Pattern for creating different types of library items
 class LibraryItemFactory {
     public static Item createItem(String type, String title, int publicationYear, String extraData) {
         if (type.equalsIgnoreCase("book")) {
@@ -153,7 +158,7 @@ class LibraryItemFactory {
     }
 }
 
-// Main Class: LibraryTest
+// Main class to run the library system
 public class LibraryTest {
     public static void main(String[] args) {
         Library library = Library.getInstance();
@@ -209,4 +214,3 @@ public class LibraryTest {
         }
     }
 }
-
